@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+    <h1>Hello</h1>
+    <form action="/page">
+      <input type="hidden" name="blog-id" value="{{ blog_id }}">
+    <p>{{blog_body}}Blog content should go here...</p>
+    </form> 
+
+ 
+
+{% endblock %}

@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+    <head>
+        <title>{{title}}</title>      
+        <style>
+            body{
+                background: mediumaquamarine;
+            }
+            a{
+                color: darkslateblue;
+                padding:20px;
+            }
+            h1{
+                text-align: center;
+                color: rgb(226, 43, 186);
+            }
+            form a{
+                color:rgb(226, 43, 186);
+                padding: 0px;
+                line-height: 50px;
+            }
+            .error{
+                color: red;
+            }
+        </style>
+    </head>
+<body>
+    <div>
+    <!-- navigation links -->
+        <a href='/blog'>Main Blog Page</a>
+        <a href='/newpost'>Add a Blog Entry</a>
+    </div>    
+
+    {% block content %}
+    {% endblock %}
+
+</body>
+</html>

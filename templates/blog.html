@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- List the blogs-->
+  <h1>Build A Blog</h1>
+  <hr />
+
+
+    <ul>
+      {% for blog in completed_blogs %}
+        <li>
+          <form action="/blog" >
+            <a href="/page"><strong>{{ blog.title }}<strong></strong></a>
+            <p>{{ blog.body }}</p>
+            <input type="hidden" name="blog-id" value="{{  blog.id }}">
+          </form>
+        </li>
+        <hr />
+      {% endfor %}
+    </ul>
+
+  
+{% endblock %}
