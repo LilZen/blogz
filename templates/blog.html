@@ -5,19 +5,27 @@
   <h1>Build A Blog</h1>
   <hr />
 
-
     <ul>
-      {% for blog in completed_blogs %}
+        {% if not request.args %}
+          {% for blog in completed_blogs %}
         <li>
           <form action="/blog" >
-            <a href="/page"><strong>{{ blog.title }}<strong></strong></a>
+            <a href="/blog?id={{blog.id}}"><strong>{{ blog.title }}</strong></a>
             <p>{{ blog.body }}</p>
             <input type="hidden" name="blog-id" value="{{  blog.id }}">
           </form>
         </li>
-        <hr />
-      {% endfor %}
-    </ul>
+          {% endfor %}
 
-  
+        {% else %}
+          <form action="/blog?id={{myblog.id}}">
+             <div>
+                 <h1> {{ myblog.title }}</h1>
+                 <p> {{ myblog.body }} </p>
+              </div>
+          </form>
+    </ul>
+  <hr />
+        {% endif %}
+
 {% endblock %}
