@@ -32,14 +32,80 @@ class User(db.Model):
         self.username = username
         self.password = password    
 
-#@app.before_request
-#def require_login():
-#    allowed_routes = ['login', 'index','signup']
-#    if request.endpoint not in allowed_routes and 'username' not in session:
-#        return redirect('/login')
+@app.before_request
+def require_login():
+    allowed_routes = ['login', 'blog', 'index','signup']
+    if request.endpoint not in allowed_routes and 'username' not in session:
+        return redirect('/login')
+
+@app.route('/login', methods=['POST','GET'])
+def login():
+
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        #validate signin
+        if user and user.password == password:
+            session['username'] = username
+            flash("You are now logged into your build-a-blog")
+            return redirect ('/blog')
+        else:
+        #TODO - fix this so it works when incorrect sign in given
+            return flash("Invalid password or username","error")
+    else:
+        return render_template('login.html')   
+
+@app.route('/signup', methods=['POST','GET'])
+def signup():
+
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        verify = request.form['verify']
+
+        username_error = ''
+        password_error = ''
+        verify_error = ''
+
+        if len(username) < 3 or len(username) > 15:
+            username_error = 'Please enter a username between 3 and 15 characters'
+            username= ''
+        if username.count(' ') > 0:
+            username_error ='Spaces not allowed in  username'
+            username = ''     
+
+        if len(password) < 7 or len(password) > 15:
+            password_error = 'Please enter a password between 7 and 15 characters'
+            password = ''
+
+        if password.count(' ') > 0:
+            password_error = 'Spaces not allowed in password'
+            password = ''    
+
+        if password != verify:
+            verify_error = 'Passwords do not match'
+            verify = ''     
+        if not username_error and not password_error and not verify_error:
+
+            existing_user = User.query.filter_by(username=username).first()
+            if not existing_user:
+                new_user = User(username, password)
+                db.session.add(new_user)
+                db.session.commit()
+                session['username'] = username
+                return redirect('/newpost')
+            else:
+            # TODO - user better response messaging
+                return "<h1>Duplicate user</h1>"
+        else:
+            return render_template('signup.html', username=username, username_error=username_error, password=password, password_error=password_error, verify=verify, verify_error=verify_error)        
+        
+    return render_template('signup.html')
+
 
 @app.route('/blog')
-def index(): 
+def blog(): 
     #goes to individual blog page
     if request.args: 
         blog_id = request.args.get('id')  
@@ -50,9 +116,20 @@ def index():
         completed_blogs = Blog.query.all()   
         return render_template('blog.html', title="Build a Blog", completed_blogs=completed_blogs)
 
+@app.route('/singleuser')
+def singleuser():
+    if request.args:
+        id_blog = request.args.get('id')
+        yourblog = Blog.query.get(id_blog)
+        return render_template('singleUser.html', yourblog=yourblog)
+    else:    
+        owner = User.query.filter_by(username=session['username']).first()
+        user_blogs = Blog.query.filter_by(owner=owner).all()
+        return render_template('singleUser.html', user_blogs=user_blogs, owner=owner)
+
 @app.route('/newpost', methods=['POST', 'GET'])
 def submit_post():
-
+    owner = User.query.filter_by(username=session['username']).first()
     blog = Blog.query.all()
     #checks for blog title and blog body is filled out
     if request.method == 'POST':
@@ -80,48 +157,7 @@ def submit_post():
 
     else:
         return render_template('newpost.html', blog=blog)
-
-@app.route('/login', methods=['POST','GET'])
-def login():
-
-    if request.method == ['POST']:
-        username = request.form['username']
-        password = request.form['password']
-        user = User.query.filter_by(username=username).first()
-        #validate signin
-        if user and user.password == password:
-            session['username'] = username
-            flash("You are now logged into your build-a-blog")
-            return redirect ('/blog')
-        else:
-            flash('Invalid password or username','error')
-    else:
-        return render_template('login.html')        
-
-@app.route('/signup', methods=['POST','GET'])
-def signup():
-
-    if request.method == ['POST']:
-        username = request.form['username']
-        password = request.form['password']
-        verify = request.form['verify']
-
-        # TODO - validate user's data
-
-        existing_user = User.query.filter_by(username=username).first()
-        if not existing_user:
-            new_user = User(username, password)
-            db.session.add(new_user)
-            db.session.commit()
-            session['username'] = username
-            return redirect('/newpost')
-        else:
-            # TODO - user better response messaging
-            return "<h1>Duplicate user</h1>"
-
-    else:
-        return render_template('signup.html')
-
+     
 @app.route('/logout')
 def logout():
     del session['username']

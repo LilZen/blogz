@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- List the blogs-->
+  <h1>Your Blogs</h1>
+  <hr />
+    
+    <ul>
+      {% if not request.args %}
+        {% for user_blog in user_blogs %}
+        <li>
+          <form action="/blog" >
+            <a href="/blog?id={{ user_blog.id}}"><strong>{{ user_blog.title }}</strong></a>
+            <p>{{ user_blog.body }}</p>
+            <input type="hidden" name="blog-id" value="{{ user_blog.id }}">
+          </form>
+        </li>
+        {% endfor%}
+      {% else %}  
+        <form action="/blog?id={{yourblog.id}}">
+          <div>
+              <h1> {{ yourblog.title }}</h1>
+              <p> {{ yourblog.body }} </p>
+           </div>
+       </form>
+    </ul>
+  <hr />
+      {% endif %}
+
+
+{% endblock %}
