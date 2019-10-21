@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+    <h1>Blog Users</h1>
+    <hr />
+    <ul>
+        <!--lists the usernames-->    
+              {% for user in completed_users %}
+            <li>
+              <form action="/" >
+                <a href="/blog?userId={{ user.id }}"><strong>{{ user.username }}</strong></a>
+              </form>
+            </li>
+              {% endfor %}
+    
+        </ul>
+      
+     
+
+{% endblock %}

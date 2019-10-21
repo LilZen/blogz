@@ -22,15 +22,28 @@
             .error{
                 color: red;
             }
+            .log{
+                text-align: right;
+            }
+            .author {
+                font-style: italic;
+                font-size: 15px;
+            }
+
         </style>
     </head>
 <body>
     <div>
     <!-- navigation links -->
-        <a href='/blog'>Main Blog Page</a>
+        <a href='/'>Home</a>
+        <a href='/blog'>All Blog Posts</a>
         <a href='/singleuser'>Your Blogs</a>
         <a href='/newpost'>Add a Blog Entry</a>
-        <a href='/logout'>log out</a>
+    </div>
+
+    <div class='log'>
+        <a href='/login'>Login</a>
+        <a href='/logout'>Logout</a>
     </div>  
     
     {% with messages = get_flashed_messages(with_categories=True) %}

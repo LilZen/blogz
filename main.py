@@ -107,25 +107,31 @@ def signup():
 @app.route('/blog')
 def blog(): 
     #goes to individual blog page
-    if request.args: 
-        blog_id = request.args.get('id')  
-        myblog = Blog.query.get(blog_id)     
-        return render_template ('blog.html', myblog=myblog)
+    blog_id = request.args.get('id')
+    user_id = request.args.get('user')    
+    completed_blogs = Blog.query.order_by(Blog.id.desc()).all()
+    
+    if 'id' in request.args: 
+        myblog = Blog.query.filter_by(id=blog_id).first()
+        return render_template ('blog.html', myblog=myblog, blog_id=blog_id)
+  
+    
     #Main blog page with full list of blogs
-    else:
-        completed_blogs = Blog.query.all()   
-        return render_template('blog.html', title="Build a Blog", completed_blogs=completed_blogs)
+    return render_template('blog.html', title="Build a Blog", completed_blogs=completed_blogs)
 
 @app.route('/singleuser')
 def singleuser():
-    if request.args:
-        id_blog = request.args.get('id')
-        yourblog = Blog.query.get(id_blog)
-        return render_template('singleUser.html', yourblog=yourblog)
-    else:    
-        owner = User.query.filter_by(username=session['username']).first()
-        user_blogs = Blog.query.filter_by(owner=owner).all()
-        return render_template('singleUser.html', user_blogs=user_blogs, owner=owner)
+    #lists all of users blogs, link 'your blog'
+    owner = User.query.filter_by(username=session['username']).first()
+    user_blogs = Blog.query.filter_by(owner=owner).all()
+    return render_template('singleUser.html', user_blogs=user_blogs)
+
+@app.route('/')
+def index(): 
+
+    #Main blog page with full list usernames
+    completed_users = User.query.all()   
+    return render_template('index.html',title="Blog Users", completed_users=completed_users)
 
 @app.route('/newpost', methods=['POST', 'GET'])
 def submit_post():
@@ -157,7 +163,7 @@ def submit_post():
 
     else:
         return render_template('newpost.html', blog=blog)
-     
+
 @app.route('/logout')
 def logout():
     del session['username']

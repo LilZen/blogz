@@ -2,31 +2,33 @@
 
 {% block content %}
 
-<!-- List the blogs-->
   <h1>Build a Blog</h1>
   <hr />
 
     <ul>
-        {% if not request.args %}
-          {% for blog in completed_blogs %}
-        <li>
-          <form action="/blog" >
-            <a href="/blog?id={{blog.id}}"><strong>{{ blog.title }}</strong></a>
-            <p>{{ blog.body }}</p>
-            <input type="hidden" name="blog-id" value="{{  blog.id }}">
-          </form>
-        </li>
-          {% endfor %}
-
-        {% else %}
+<!--single blog page-->
+          {% if request.args %}
           <form action="/blog?id={{myblog.id}}">
              <div>
                  <h1> {{ myblog.title }}</h1>
                  <p> {{ myblog.body }} </p>
+                 <p class='author'>Written by: {{myblog.owner.username}}</p>
               </div>
-          </form>
-    </ul>
+          </form>      
+
+          {% else %}
+          {% for blog in completed_blogs %}
+          <li>
+            <form action="/blog" >
+              <a href="/blog?id={{blog.id}}"><strong>{{ blog.title }}</strong></a>
+              <p>{{ blog.body }}</p>            
+              <p class='author'>Written by: {{blog.owner.username}}</p>
+            </form>
+          </li>
+            {% endfor %}
+          {% endif %}  
+        </ul>
   <hr />
-        {% endif %}
+
 
 {% endblock %}
