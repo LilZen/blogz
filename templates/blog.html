@@ -7,7 +7,7 @@
 
     <ul>
 <!--single blog page-->
-          {% if request.args %}
+          {% if id %}
           <form action="/blog?id={{myblog.id}}">
              <div>
                  <h1> {{ myblog.title }}</h1>
