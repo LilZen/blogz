@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
+<h1>Blogz by Username</h1>
 <ul>
 {% for blog in completed_blogs %}
+
     <li>
     <form action="/blogz" >
         <a href="/blog?id={{blog.id}}"><strong>{{ blog.title }}</strong></a>
