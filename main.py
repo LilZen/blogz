@@ -107,20 +107,17 @@ def signup():
 @app.route('/blog')
 def blog(): 
     #goes to individual blog page
-    blog_id = request.args.get('id')
-    user_id = request.args.get('user')    
-    completed_blogs = Blog.query.order_by(Blog.id.desc()).all()
+    blog_id = request.args.get('id')   
     
     if 'id' in request.args: 
         myblog = Blog.query.filter_by(id=blog_id).first()
         return render_template ('blog.html', myblog=myblog, blog_id=blog_id)
     
-    if 'user' in request.args:
-        blogger = User.query.filter_by(id=user_id).all()
-        return render_template('singleUser.html',blogger=blogger)
-    
-    #Main blog page with full list of blogs
-    return render_template('blog.html', title="Build a Blog", completed_blogs=completed_blogs)
+@app.route('/blogz')
+def blogz():
+    id = request.args.get('userId')
+    completed_blogs = Blog.query.filter_by(owner_id=id).all()
+    return render_template('blogz.html', title="Build a Blog", completed_blogs=completed_blogs)
 
 @app.route('/singleuser')
 def singleuser():
@@ -134,7 +131,7 @@ def index():
 
     #Main blog page with full list usernames
     completed_users = User.query.all()   
-    return render_template('index.html',title="Blog Users", completed_users=completed_users)
+    return render_template('index.html', completed_users=completed_users)
 
 @app.route('/newpost', methods=['POST', 'GET'])
 def submit_post():

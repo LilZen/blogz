@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<ul>
+{% for blog in completed_blogs %}
+    <li>
+    <form action="/blogz" >
+        <a href="/blog?id={{blog.id}}"><strong>{{ blog.title }}</strong></a>
+        <p>{{ blog.body }}</p>            
+        <p class='author'>Written by: {{blog.owner.username}}</p>
+    </form>
+    </li>
+{% endfor %}
+</ul>
+<hr />
+{% endblock %}

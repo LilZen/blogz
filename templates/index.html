@@ -10,13 +10,12 @@
               {% for user in completed_users %}
             <li>
               <form action="/" >
-                <a href="/blog?userId={{ user.id }}"><strong>{{ user.username }}</strong></a>
+                <a href="/blogz?userId={{ user.id }}"><strong>{{ user.username }}</strong></a>
               </form>
             </li>
               {% endfor %}
     
         </ul>
-      
-     
+
 
 {% endblock %}
