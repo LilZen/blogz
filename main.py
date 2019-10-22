@@ -114,7 +114,10 @@ def blog():
     if 'id' in request.args: 
         myblog = Blog.query.filter_by(id=blog_id).first()
         return render_template ('blog.html', myblog=myblog, blog_id=blog_id)
-  
+    
+    if 'user' in request.args:
+        blogger = User.query.filter_by(id=user_id).all()
+        return render_template('singleUser.html',blogger=blogger)
     
     #Main blog page with full list of blogs
     return render_template('blog.html', title="Build a Blog", completed_blogs=completed_blogs)
