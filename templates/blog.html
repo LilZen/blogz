@@ -15,5 +15,17 @@
             <p class='author'>Written by: {{myblog.owner.username}}</p>
     </div>
     </form>
-{% endif %}    
+    {%else%}
+
+    {% for blog in completed_blogs %}
+    <li>
+    <form action="/blog" >
+        <a href="/blog?id={{blog.id}}"><strong>{{ blog.title }}</strong></a>
+        <p>{{ blog.body }}</p>            
+        <p class='author'>Written by: {{blog.owner.username}}</p>
+    </form>
+    </li>
+{% endfor %}
+{% endif %} 
+
 {% endblock %}
